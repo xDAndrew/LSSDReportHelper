@@ -21,6 +21,10 @@
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.PutVehicleBtn = new System.Windows.Forms.Button();
+            this.GetVehicleBtn = new System.Windows.Forms.Button();
+            this.VehicleList = new System.Windows.Forms.ComboBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
@@ -47,6 +51,8 @@
             this.button1 = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
+            this.tabPage1.SuspendLayout();
+            this.groupBox6.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -69,6 +75,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.groupBox6);
             this.tabPage1.Location = new System.Drawing.Point(4, 29);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
@@ -76,6 +83,48 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Оружие";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // groupBox6
+            // 
+            this.groupBox6.Controls.Add(this.PutVehicleBtn);
+            this.groupBox6.Controls.Add(this.GetVehicleBtn);
+            this.groupBox6.Controls.Add(this.VehicleList);
+            this.groupBox6.Location = new System.Drawing.Point(3, 3);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.Size = new System.Drawing.Size(786, 65);
+            this.groupBox6.TabIndex = 0;
+            this.groupBox6.TabStop = false;
+            this.groupBox6.Text = "Отчет о взятии / сдаче автомобиля";
+            // 
+            // PutVehicleBtn
+            // 
+            this.PutVehicleBtn.Location = new System.Drawing.Point(411, 26);
+            this.PutVehicleBtn.Name = "PutVehicleBtn";
+            this.PutVehicleBtn.Size = new System.Drawing.Size(94, 29);
+            this.PutVehicleBtn.TabIndex = 2;
+            this.PutVehicleBtn.Text = "Сдал";
+            this.PutVehicleBtn.UseVisualStyleBackColor = true;
+            this.PutVehicleBtn.Click += new System.EventHandler(this.PutVehicleBtn_Click);
+            // 
+            // GetVehicleBtn
+            // 
+            this.GetVehicleBtn.Location = new System.Drawing.Point(311, 26);
+            this.GetVehicleBtn.Name = "GetVehicleBtn";
+            this.GetVehicleBtn.Size = new System.Drawing.Size(94, 29);
+            this.GetVehicleBtn.TabIndex = 1;
+            this.GetVehicleBtn.Text = "Взял";
+            this.GetVehicleBtn.UseVisualStyleBackColor = true;
+            this.GetVehicleBtn.Click += new System.EventHandler(this.GetVehicleBtn_Click);
+            // 
+            // VehicleList
+            // 
+            this.VehicleList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.VehicleList.FormattingEnabled = true;
+            this.VehicleList.Location = new System.Drawing.Point(6, 26);
+            this.VehicleList.Name = "VehicleList";
+            this.VehicleList.Size = new System.Drawing.Size(299, 28);
+            this.VehicleList.TabIndex = 0;
+            this.VehicleList.SelectedIndexChanged += new System.EventHandler(this.VehicleList_SelectedIndexChanged);
             // 
             // tabPage2
             // 
@@ -333,8 +382,11 @@
             this.Controls.Add(this.tabControl1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "MainForm";
-            this.Text = "LSSD Report Helper | PB v0.03";
+            this.Text = "LSSD Report Helper | PB v0.04";
+            this.TopMost = true;
             this.tabControl1.ResumeLayout(false);
+            this.tabPage1.ResumeLayout(false);
+            this.groupBox6.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
@@ -380,6 +432,10 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.GroupBox groupBox6;
+        private System.Windows.Forms.Button PutVehicleBtn;
+        private System.Windows.Forms.Button GetVehicleBtn;
+        private System.Windows.Forms.ComboBox VehicleList;
     }
 }
 

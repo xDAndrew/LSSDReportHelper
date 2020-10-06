@@ -1,11 +1,11 @@
 ﻿using LowLevelHooking;
+using LSSDReportHelper;
+using LSSDReportHelper.Engines;
+using LSSDReportHelper.Models;
 using Newtonsoft.Json;
 using System;
 using System.IO;
 using System.Windows.Forms;
-using LSSDReportHelper;
-using LSSDReportHelper.Engines;
-using LSSDReportHelper.Models;
 
 namespace WindowsFormsApp1
 {
@@ -14,6 +14,8 @@ namespace WindowsFormsApp1
         private readonly ScreenShooter _screenShooter = new ScreenShooter();
         private readonly PatrolEngine _patrolEngine = new PatrolEngine();
         private readonly DiscordEngine _discord = new DiscordEngine();
+
+        private string _selectedVehicle;
 
         public MainForm()
         {
@@ -30,6 +32,8 @@ namespace WindowsFormsApp1
 
             Program.GlobalKeyboardHook.KeyDownOrUp += GlobalKeyboardHook_KeyDownOrUp;
             Disposed += MainView_Disposed;
+
+            SetVehicleList();
         }
 
         private void button5_Click_1(object sender, EventArgs e)
@@ -120,6 +124,12 @@ namespace WindowsFormsApp1
                 case VirtualKey.D6:
                     Hide();
                     break;
+                case VirtualKey.D7:
+                    VehicleAction();
+                    break;
+                case VirtualKey.D8:
+                    VehicleAction(false);
+                    break;
             }
         }
 
@@ -156,6 +166,42 @@ namespace WindowsFormsApp1
             textBox2.Text = folderBrowserDialog1.SelectedPath;
             if (currentValue != folderBrowserDialog1.SelectedPath)
                 button1.Enabled = true;
+        }
+
+        private void GetVehicleBtn_Click(object sender, EventArgs e)
+        {
+            VehicleAction();
+        }
+
+        private void PutVehicleBtn_Click(object sender, EventArgs e)
+        {
+            VehicleAction(false);
+        }
+
+        private void SetVehicleList()
+        {
+            for (var i = 1; i <= 20; i++)
+            {
+                var number = i < 10 ? $"0{i}" : $"{i}";
+                VehicleList.Items.Add($"LSSD{number}");
+            }
+
+            VehicleList.SelectedIndex = VehicleList.FindStringExact("LSSD01");
+            _selectedVehicle = VehicleList.Items[VehicleList.SelectedIndex].ToString();
+        }
+
+        private async void VehicleAction(bool isGet = true)
+        {
+            var path = Directory.GetCurrentDirectory();
+            var file = _screenShooter.SaveImage(path);
+            var action = isGet ? "Взял" : "Сдал";
+            await _discord.SendMessageWithFile(762405385842982932, $"1. Andrew Sinson\n2. {_selectedVehicle}({action})\n3.", file);
+            File.Delete(file);
+        }
+
+        private void VehicleList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            _selectedVehicle = VehicleList.Items[VehicleList.SelectedIndex].ToString();
         }
     }
 }
