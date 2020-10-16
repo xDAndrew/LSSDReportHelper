@@ -7,5 +7,7 @@
         public string Fine { get; set; }
         public string Patrol { get; set; }
         public int PatrolInterval { get; set; }
+        public string DiscordToken { get; set; }
+        public string Nickname { get; set; }
     }
 }

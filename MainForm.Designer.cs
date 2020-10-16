@@ -43,6 +43,8 @@
             this.button3 = new System.Windows.Forms.Button();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.DiscordNickname = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.button7 = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
@@ -70,7 +72,7 @@
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(800, 503);
+            this.tabControl1.Size = new System.Drawing.Size(800, 537);
             this.tabControl1.TabIndex = 8;
             // 
             // tabPage1
@@ -79,9 +81,9 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 29);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(792, 470);
+            this.tabPage1.Size = new System.Drawing.Size(792, 504);
             this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "Оружие";
+            this.tabPage1.Text = "Отчеты";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // groupBox6
@@ -131,7 +133,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 29);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(792, 470);
+            this.tabPage2.Size = new System.Drawing.Size(792, 504);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Автомобиль";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -146,7 +148,7 @@
             this.tabPage3.Controls.Add(this.button1);
             this.tabPage3.Location = new System.Drawing.Point(4, 29);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(792, 470);
+            this.tabPage3.Size = new System.Drawing.Size(792, 504);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Настройки";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -155,7 +157,7 @@
             // 
             this.groupBox5.Controls.Add(this.button4);
             this.groupBox5.Controls.Add(this.textBox3);
-            this.groupBox5.Location = new System.Drawing.Point(8, 248);
+            this.groupBox5.Location = new System.Drawing.Point(8, 283);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(776, 67);
             this.groupBox5.TabIndex = 0;
@@ -184,7 +186,7 @@
             // 
             this.groupBox4.Controls.Add(this.button5);
             this.groupBox4.Controls.Add(this.textBox5);
-            this.groupBox4.Location = new System.Drawing.Point(8, 102);
+            this.groupBox4.Location = new System.Drawing.Point(8, 137);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(776, 67);
             this.groupBox4.TabIndex = 0;
@@ -213,7 +215,7 @@
             // 
             this.groupBox3.Controls.Add(this.button6);
             this.groupBox3.Controls.Add(this.textBox4);
-            this.groupBox3.Location = new System.Drawing.Point(8, 175);
+            this.groupBox3.Location = new System.Drawing.Point(8, 210);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(776, 67);
             this.groupBox3.TabIndex = 0;
@@ -245,7 +247,7 @@
             this.groupBox2.Controls.Add(this.button2);
             this.groupBox2.Controls.Add(this.button3);
             this.groupBox2.Controls.Add(this.textBox2);
-            this.groupBox2.Location = new System.Drawing.Point(8, 321);
+            this.groupBox2.Location = new System.Drawing.Point(8, 356);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(776, 98);
             this.groupBox2.TabIndex = 0;
@@ -300,6 +302,8 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.DiscordNickname);
+            this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.button7);
             this.groupBox1.Controls.Add(this.label3);
@@ -307,15 +311,32 @@
             this.groupBox1.Controls.Add(this.DiscordLoginText);
             this.groupBox1.Location = new System.Drawing.Point(8, 3);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(776, 93);
+            this.groupBox1.Size = new System.Drawing.Size(776, 128);
             this.groupBox1.TabIndex = 7;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Discord Configuration";
             // 
+            // DiscordNickname
+            // 
+            this.DiscordNickname.Location = new System.Drawing.Point(82, 93);
+            this.DiscordNickname.Name = "DiscordNickname";
+            this.DiscordNickname.Size = new System.Drawing.Size(578, 27);
+            this.DiscordNickname.TabIndex = 4;
+            this.DiscordNickname.TextChanged += new System.EventHandler(this.DiscordNickname_TextChanged);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(6, 96);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(75, 20);
+            this.label5.TabIndex = 3;
+            this.label5.Text = "Nickname";
+            // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(6, 62);
+            this.label4.Location = new System.Drawing.Point(6, 63);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(70, 20);
             this.label4.TabIndex = 1;
@@ -334,7 +355,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 29);
+            this.label3.Location = new System.Drawing.Point(6, 30);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(52, 20);
             this.label3.TabIndex = 1;
@@ -342,7 +363,7 @@
             // 
             // DiscordPasswordText
             // 
-            this.DiscordPasswordText.Location = new System.Drawing.Point(82, 59);
+            this.DiscordPasswordText.Location = new System.Drawing.Point(82, 60);
             this.DiscordPasswordText.Name = "DiscordPasswordText";
             this.DiscordPasswordText.PasswordChar = '*';
             this.DiscordPasswordText.Size = new System.Drawing.Size(578, 27);
@@ -350,14 +371,14 @@
             // 
             // DiscordLoginText
             // 
-            this.DiscordLoginText.Location = new System.Drawing.Point(82, 26);
+            this.DiscordLoginText.Location = new System.Drawing.Point(82, 27);
             this.DiscordLoginText.Name = "DiscordLoginText";
             this.DiscordLoginText.Size = new System.Drawing.Size(578, 27);
             this.DiscordLoginText.TabIndex = 0;
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(690, 425);
+            this.button1.Location = new System.Drawing.Point(690, 460);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(94, 37);
             this.button1.TabIndex = 6;
@@ -378,11 +399,11 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 503);
+            this.ClientSize = new System.Drawing.Size(800, 537);
             this.Controls.Add(this.tabControl1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "MainForm";
-            this.Text = "LSSD Report Helper | PB v0.04";
+            this.Text = "LSSD Report Helper | PB v0.05";
             this.TopMost = true;
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
@@ -436,6 +457,8 @@
         private System.Windows.Forms.Button PutVehicleBtn;
         private System.Windows.Forms.Button GetVehicleBtn;
         private System.Windows.Forms.ComboBox VehicleList;
+        private System.Windows.Forms.TextBox DiscordNickname;
+        private System.Windows.Forms.Label label5;
     }
 }
 

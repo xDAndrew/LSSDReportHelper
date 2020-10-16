@@ -1,25 +1,31 @@
 ﻿using LSSDReportHelper.Models;
+using LSSDReportHelper.Services;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace LSSDReportHelper.Engines
 {
     public class DiscordEngine
     {
         private readonly HttpClient _httpClient = new HttpClient();
+        private readonly ConfigService _config = new ConfigService();
 
         public DiscordEngine()
         {
-            _httpClient.DefaultRequestHeaders.Add(HttpRequestHeader.Authorization.ToString(), "MjgwMzE1NzkxMjM5MjgyNjg5.X3w6JA.vNArO3xEiuPo6BVgh4OaSELR9lw");
+            var token = _config.GetDiscordToken();
+            if (token != null && !token.Equals(""))
+            {
+                _httpClient.DefaultRequestHeaders.Add(HttpRequestHeader.Authorization.ToString(), token);
+            }
         }
 
-        public async Task SignIn(string email, string password)
+        public async Task<bool> SignIn(string email, string password)
         {
             var body = new DiscordLoginModel
             {
@@ -29,8 +35,16 @@ namespace LSSDReportHelper.Engines
 
             var json = JsonConvert.SerializeObject(body);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
-            await _httpClient.PostAsync("https://discord.com/api/v8/auth/login", httpContent);
-            //await httpResponse.Content.ReadAsStringAsync();
+            var response = await _httpClient.PostAsync("https://discord.com/api/v8/auth/login", httpContent);
+            
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                var textResponse = await response.Content.ReadAsStringAsync();
+                var rss = JObject.Parse(textResponse);
+                _config.SaveDiscordToken((string)rss["token"]);
+            }
+
+            return response.StatusCode == HttpStatusCode.OK;
         }
 
         public async Task SendMessage(long server, string message)
@@ -51,7 +65,11 @@ namespace LSSDReportHelper.Engines
             };
             
             var httpResponse = await _httpClient.SendAsync(request);
-            await httpResponse.Content.ReadAsStringAsync();
+            //await httpResponse.Content.ReadAsStringAsync();
+            if (httpResponse.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                throw new Exception("Вы не прошли авторизацию или ваш пароль поменялся..");
+            }
         }
 
         public async Task SendMessageWithFile(long server, string message, string path)
@@ -64,8 +82,11 @@ namespace LSSDReportHelper.Engines
             };
 
             var httpResponse = await _httpClient.PostAsync($"https://discord.com/api/v8/channels/{server}/messages", form);
-            var res = await httpResponse.Content.ReadAsStringAsync();
-            //MessageBox.Show(res);
+            //await httpResponse.Content.ReadAsStringAsync();
+            if (httpResponse.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                throw new Exception("Вы не прошли авторизацию или ваш пароль поменялся..");
+            }
         }
     }
 }

@@ -2,7 +2,7 @@
 using LSSDReportHelper;
 using LSSDReportHelper.Engines;
 using LSSDReportHelper.Models;
-using Newtonsoft.Json;
+using LSSDReportHelper.Services;
 using System;
 using System.IO;
 using System.Windows.Forms;
@@ -13,22 +13,29 @@ namespace WindowsFormsApp1
     {
         private readonly ScreenShooter _screenShooter = new ScreenShooter();
         private readonly PatrolEngine _patrolEngine = new PatrolEngine();
-        private readonly DiscordEngine _discord = new DiscordEngine();
+        private DiscordEngine _discord = new DiscordEngine();
+        private readonly ConfigService _config = new ConfigService();
 
         private string _selectedVehicle;
 
         public MainForm()
         {
             InitializeComponent();
-            var config = File.ReadAllText("config.json");
-            var myJObject = JsonConvert.DeserializeObject<ConfigModel>(config);
 
-            textBox5.Text = myJObject.Arrest;
-            textBox4.Text = myJObject.ArrestSupport;
-            textBox3.Text = myJObject.Fine;
-            textBox2.Text = myJObject.Patrol;
-            textBox1.Text = myJObject.PatrolInterval.ToString();
+            // Load app configuration
+            var config = _config.GetConfig();
+            textBox5.Text = config.Arrest;
+            textBox4.Text = config.ArrestSupport;
+            textBox3.Text = config.Fine;
+            textBox2.Text = config.Patrol;
+            textBox1.Text = config.PatrolInterval.ToString();
+            DiscordNickname.Text = config.Nickname;
             button1.Enabled = false;
+
+            if (config.DiscordToken != null && !config.DiscordToken.Equals(""))
+            {
+                UpdateDiscordStatus();
+            }
 
             Program.GlobalKeyboardHook.KeyDownOrUp += GlobalKeyboardHook_KeyDownOrUp;
             Disposed += MainView_Disposed;
@@ -65,16 +72,18 @@ namespace WindowsFormsApp1
 
         private void button4_Click(object sender, EventArgs e)
         {
+            // Save app configuration
             var saveObject = new ConfigModel
             {
                 Arrest = textBox5.Text,
                 ArrestSupport = textBox4.Text,
                 Fine = textBox3.Text,
                 Patrol = textBox2.Text,
-                PatrolInterval = (int)GetPatrolInterval()
+                PatrolInterval = (int)GetPatrolInterval(),
+                Nickname = DiscordNickname.Text
             };
-            var config = JsonConvert.SerializeObject(saveObject, Formatting.Indented);
-            File.WriteAllText("config.json", config);
+            _config.SaveConfig(saveObject);
+            
             button1.Enabled = false;
         }
 
@@ -85,7 +94,29 @@ namespace WindowsFormsApp1
 
         private async void DiscordLoginBtn_Click(object sender, EventArgs e)
         {
-            await _discord.SignIn(DiscordLoginText.Text, DiscordPasswordText.Text);
+            if (button7.Text == "Log out")
+            {
+                _config.RemoveDiscordToken();
+                _discord = new DiscordEngine();
+                DiscordLoginText.Text = "";
+                DiscordPasswordText.Text = "";
+                DiscordLoginText.Enabled = true;
+                DiscordPasswordText.Enabled = true;
+                button7.Text = "Sign in";
+            }
+            else
+            {
+                var result = await _discord.SignIn(DiscordLoginText.Text, DiscordPasswordText.Text);
+                if (result)
+                {
+                    _discord = new DiscordEngine();
+                    UpdateDiscordStatus();
+                }
+                else
+                {
+                    MessageBox.Show("Неверно введен логин или пароль!");
+                }
+            }
         }
 
         private uint GetPatrolInterval()
@@ -116,7 +147,7 @@ namespace WindowsFormsApp1
                     _screenShooter.SaveImage(textBox3.Text);
                     break;
                 case VirtualKey.D4:
-                    button2.PerformClick();
+                    StartPatrol();
                     break;
                 case VirtualKey.D5:
                     Show();
@@ -140,23 +171,7 @@ namespace WindowsFormsApp1
 
         private void button2_Click(object sender, EventArgs e)
         {
-            var value = GetPatrolInterval();
-            if (button2.Text == "Начать")
-            {
-                _patrolEngine.ChangeInterval(value);
-                _patrolEngine.ChangeFolder(textBox2.Text);
-
-                button2.Text = "Завершить";
-                textBox1.Enabled = false;
-                button3.Enabled = false;
-            }
-            else
-            {
-                button2.Text = "Начать";
-                textBox1.Enabled = true;
-                button3.Enabled = true;
-            }
-            _patrolEngine.StartPatrol();
+            StartPatrol();
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -195,13 +210,54 @@ namespace WindowsFormsApp1
             var path = Directory.GetCurrentDirectory();
             var file = _screenShooter.SaveImage(path);
             var action = isGet ? "Взял" : "Сдал";
-            await _discord.SendMessageWithFile(762405385842982932, $"1. Andrew Sinson\n2. {_selectedVehicle}({action})\n3.", file);
+            try
+            {
+                var config = _config.GetConfig();
+                await _discord.SendMessageWithFile(757190772528382002, $"1. {config.Nickname}\n2. {_selectedVehicle}({action})\n3.", file);
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
             File.Delete(file);
         }
 
         private void VehicleList_SelectedIndexChanged(object sender, EventArgs e)
         {
             _selectedVehicle = VehicleList.Items[VehicleList.SelectedIndex].ToString();
+        }
+
+        private void StartPatrol()
+        {
+            var value = GetPatrolInterval();
+            if (button2.Text == "Начать")
+            {
+                _patrolEngine.ChangeInterval(value);
+                _patrolEngine.ChangeFolder(textBox2.Text);
+
+                button2.Text = "Завершить";
+                textBox1.Enabled = false;
+                button3.Enabled = false;
+            }
+            else
+            {
+                button2.Text = "Начать";
+                textBox1.Enabled = true;
+                button3.Enabled = true;
+            }
+            _patrolEngine.StartPatrol();
+        }
+
+        private void UpdateDiscordStatus()
+        {
+            button7.Text = "Log out";
+            DiscordLoginText.Enabled = false;
+            DiscordPasswordText.Enabled = false;
+        }
+
+        private void DiscordNickname_TextChanged(object sender, EventArgs e)
+        {
+            button1.Enabled = true;
         }
     }
 }

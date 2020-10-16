@@ -1,1 +1,9 @@
-﻿{ "Arrest": "", "ArrestSupport": "", "Fine" : "", "Patrol" : "", "PatrolInterval" : 30 }
+﻿{
+  "Arrest": "",
+  "ArrestSupport": "",
+  "Fine": "",
+  "Patrol": "",
+  "PatrolInterval": 30,
+  "DiscordToken": null,
+  "Nickname": "" 
+}
